@@ -1,0 +1,10 @@
+;system wayfinder notes - see `man way` or `way help`
+{
+ :usage-reminders {:bbtest ["Testing with Babshka" 
+                            "bb -m way.main notecheck"
+                            "bb -m way.main show"
+			    ]
+		   :bbrepl ["Starting the repl" "bb nrepl"]
+                   }
+  :commands       {:repl ["bb nrepl"]}
+}

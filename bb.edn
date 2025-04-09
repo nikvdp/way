@@ -1,0 +1,14 @@
+{:tasks {nrepl
+         {:requires ([babashka.fs :as fs]
+                     [babashka.nrepl.server :as srv])
+          :task (do (srv/start-server! {:host "localhost"
+                                        :port 13337})
+                  (spit ".nrepl-port" "13337")
+                  (-> (Runtime/getRuntime)
+                    (.addShutdownHook
+                      (Thread. (fn [] (fs/delete ".nrepl-port")))))
+                  (deref (promise)))}}
+ :paths ["src"]
+ }
+
+
