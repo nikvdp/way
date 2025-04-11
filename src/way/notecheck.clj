@@ -1,9 +1,10 @@
-#!/usr/bin/env bb
 (ns way.notecheck
   (:require [clojure.java.io :as io]
             [babashka.fs :as fs]
+            [way.terminal :as term]
             [clojure.edn :as edn]))
-(bean (fs/last-modified-time ".wayf"))
+
+;(bean (fs/last-modified-time ".wayf"))
 
 (defn file-older-than? [fname epoch]
   (let [fmodtime (fs/file-time->millis (fs/last-modified-time fname))]
@@ -17,8 +18,14 @@
     (let [dotfile (fs/file ".wayf")
           notes (-> dotfile slurp edn/read-string)
           reminders (-> notes :usage-reminders keys)
-          reminders (->> reminders (map symbol) (map str) (apply str))
-          message   (format "Wayfinder notes available here: %s\nRun `wayf show` to read." reminders)
+          reminders (->> reminders (map symbol) (map str) (interleave (repeat " ")) (apply str))
+          commands (-> notes :commands keys)
+          commands (->> commands (map symbol) (map str) 
+                         (interleave (repeat " ")) (apply str))
+          message   (str
+                      (format "Wayfinder notes available here: %s\nRun `way show` to read.\n" reminders)
+                      (format "Wayfinder commands available here: %s\nRun `way run` to execute" commands)
+                      )
           ]
       (println message)
       (fs/set-last-modified-time dotfile (System/currentTimeMillis))
@@ -27,21 +34,26 @@
     )
   )
 
-(defn show [& args]
+(defn show [args]
  (when (fs/exists? ".wayf")
     (let [dotfile (fs/file ".wayf")
           notes (-> dotfile slurp edn/read-string)
           reminders (-> notes :usage-reminders keys)
-          reminders (->> reminders (map symbol) (map str) (apply str))
+          reminders (->> reminders (map symbol) (map str) 
+                         (interleave (repeat " ")))
+          reminder-str (apply str reminders)
+          args (if (= "all" (first args))
+                 reminders args)
           ]
       (when (empty? args)
-        (println "Please choose which usage reminders to show:" reminders)
+        (println "Please choose which usage reminders to show:" reminder-str)
         (System/exit 1))
 
       (doseq [arg args
             :let [karg (keyword arg)
                   message-lines (-> notes :usage-reminders karg)]]
-        (doseq [line message-lines]
+        (println (str term/bold (first message-lines) term/reset ))
+        (doseq [line (rest message-lines)]
                 (println line))
         )
       

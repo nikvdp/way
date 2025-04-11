@@ -1,10 +1,13 @@
 ;system wayfinder notes - see `man way` or `way help`
 {
+ :direntry-note "Shows on first entry to dir"
  :usage-reminders {:bbtest ["Testing with Babshka" 
                             "bb -m way.main notecheck"
                             "bb -m way.main show"
 			    ]
-		   :bbrepl ["Starting the repl" "bb nrepl"]
+		   :bbrepl ["Starting the repl" "make nrepl"]
+		   :touch  ["Make note active again" "touch -d yesterday .wayf"]
                    }
-  :commands       {:repl ["bb nrepl"]}
+  :commands       {:repl ["make repl"]}
+  :reminders      ["Clean up something something"]
 }
