@@ -7,5 +7,5 @@ uberjar:
 exe: uberjar
 	cat ~/bin/bb artifacts/way.jar > artifacts/way
 
-deploy: uberjar
+deploy: exe
 	cp artifacts/way ~/bin/
