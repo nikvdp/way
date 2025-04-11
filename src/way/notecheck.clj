@@ -28,6 +28,8 @@
                       )
           ]
       (println message)
+      (when-let [dirnote (:direntry-note notes)]
+        (println (str term/bold dirnote term/reset)))
       (fs/set-last-modified-time dotfile (System/currentTimeMillis))
       )
 
