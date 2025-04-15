@@ -1,0 +1,15 @@
+[Unit]
+Description=System Wayfinder
+Requires=wayf.socket
+After=network.target
+
+[Service]
+ExecStart=/opt/wayf/way systemd-serve
+Environment=LISTEN_FDS=3
+Restart=always
+User=nobody
+Group=nogroup
+
+[Install]
+WantedBy=multi-user.target
+

@@ -1,0 +1,9 @@
+[Unit]
+Description=System Wayfinder
+
+[Socket]
+ListenStream=127.0.0.1:3250
+Accept=no
+
+[Install]
+WantedBy=wayf.target
