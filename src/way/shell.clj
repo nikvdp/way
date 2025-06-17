@@ -14,10 +14,10 @@
   (println 
     (case (first args)
       "help" (help (rest args))
-      "bash" "function cd_wayfinder() { cd \"$@\" && [ -f .wayf ] && way notecheck; }; alias cd=cd_wayfinder"
+      "bash" "function cd_wayfinder() { cd \"$@\" && [ -f .wayf ] && way notecheck; }; alias cd=cd_wayfinder; alias wayr='way run'"
       "other shells unsupported as of yet; try 'way shell help'"
     )
   )
 )
 
-(help ["bash"])
+
