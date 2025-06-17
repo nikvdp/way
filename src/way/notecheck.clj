@@ -1,7 +1,9 @@
 (ns way.notecheck
   (:require [clojure.java.io :as io]
             [babashka.fs :as fs]
+            [way.conf :as conf]
             [way.terminal :as term]
+            [way.wprint :as wprint]
             [clojure.edn :as edn]))
 
 ;(bean (fs/last-modified-time ".wayf"))
@@ -11,6 +13,9 @@
     (< fmodtime epoch)))
 
 ;(file-older-than? ".wayf" (- (System/currentTimeMillis)(* 1000 60 30)))
+
+;way show||all bbtest bbrepl touch
+;way run ||lsr ls vimt
 
 (defn check [_]
   (when (and (fs/exists? ".wayf")
@@ -27,7 +32,7 @@
                       (format "Wayfinder commands available here: %s\nRun `way run` to execute" commands)
                       )
           ]
-      (println message)
+      (wprint/wprint message)
       (when-let [dirnote (:direntry-note notes)]
         (println (str term/bold dirnote term/reset)))
       (fs/set-last-modified-time dotfile (System/currentTimeMillis))
@@ -61,3 +66,15 @@
       
       )) 
 )
+
+(defn login 
+  "Show system-specific notes from central config file 
+  as well as notes from central network server
+  at login time."
+  [args]
+  (let [confdata (conf/load-conf)]
+    (when confdata
+      (wprint/whead)
+      (-> confdata :login-message wprint/wprint))))
+
+
