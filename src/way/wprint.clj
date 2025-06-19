@@ -4,13 +4,21 @@
   (comment let [marker (concat "way※" (repeat "x"))]
    (doall (map #(println %1 "┃" %2) marker (seq lines))))
 
-  (if (seq? lines)
-    (doseq [line lines] (println "※┃" line))
-    (doseq [line (clojure.string/split lines #"\n")] (println "※┃" line)))
+  (if (string? lines) 
+    (doseq [line (clojure.string/split lines #"\n")] (println " ┃" line))
+    (doseq [line lines] (println " ┃" line))
+    )
 )
 
-(defn whead []
-  (println "※┃Wayfinder System Notes")
-  (println "※┣━━━━━━━━━━━━━━━━━━━━━━")
+(defn whead [message]
+  (println (apply str "※┃" message))
+  (println (apply str "▶┣" (repeat (count message) "━")))
 )
 
+(defn wsub [message]
+  (println (apply str "※┃" message))
+  (println (apply str "▶┠" (repeat (count message) "─")))
+)
+
+(defn wblank []
+  (println " ┃" ))

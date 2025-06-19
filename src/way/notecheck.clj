@@ -46,26 +46,32 @@
     (let [dotfile (fs/file ".wayf")
           notes (-> dotfile slurp edn/read-string)
           reminders (-> notes :usage-reminders keys)
-          reminders (->> reminders (map symbol) (map str) 
-                         (interleave (repeat " ")))
-          reminder-str (apply str reminders)
-          args (if (= "all" (first args))
-                 reminders args)
-          ]
+          args (if (= "all" (first args)) reminders args)]
+
       (when (empty? args)
-        (println "Please choose which usage reminders to show:" reminder-str)
+        (let [reminder-str (apply str 
+                                  (->> reminders 
+                                       (map symbol) 
+                                       (map str) 
+                                       (interleave (repeat " "))))]
+          (println "Please choose which usage reminders to show:" reminder-str))
         (System/exit 1))
 
       (doseq [arg args
             :let [karg (keyword arg)
-                  message-lines (-> notes :usage-reminders karg)]]
-        (println (str term/bold (first message-lines) term/reset ))
-        (doseq [line (rest message-lines)]
-                (println line))
-        )
-      
-      )) 
-)
+                  message-lines (-> notes :usage-reminders karg)
+                  cmd?          (-> notes :commands karg)
+                  ]]
+        ;(println (str term/bold (first message-lines) term/reset ))
+        (wprint/whead (-> arg name str))
+        ;(doseq [line message-lines] (println line))
+        (wprint/wprint message-lines)
+        (when cmd?
+          (wprint/wblank )
+          (wprint/wsub "associated command:")
+          (wprint/wprint cmd?))
+        (println))
+      )))
 
 (defn login 
   "Show system-specific notes from central config file 
@@ -74,7 +80,7 @@
   [args]
   (let [confdata (conf/load-conf)]
     (when confdata
-      (wprint/whead)
+      (wprint/whead "System Wayfinder Login Notes")
       (-> confdata :login-message wprint/wprint))))
 
 
