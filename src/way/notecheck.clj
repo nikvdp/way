@@ -23,19 +23,26 @@
     (let [dotfile (fs/file ".wayf")
           notes (-> dotfile slurp edn/read-string)
           reminders (-> notes :usage-reminders keys)
-          reminders (->> reminders (map symbol) (map str) (interleave (repeat " ")) (apply str))
           commands (-> notes :commands keys)
-          commands (->> commands (map symbol) (map str) 
-                         (interleave (repeat " ")) (apply str))
-          message   (str
-                      (format "Wayfinder notes available here: %s\nRun `way show` to read.\n" reminders)
-                      (format "Wayfinder commands available here: %s\nRun `way run` to execute" commands)
-                      )
           ]
-      (wprint/wprint message)
+      (when (or reminders commands)
+        (let [reminders (->> reminders (map symbol) (map str) (interleave (repeat " ")) (apply str)) 
+              commands (->> commands (map symbol) (map str) (interleave (repeat " ")) (apply str))
+
+              ]
+        (wprint/wdecor "Wayfinder help available here")
+        (when reminders (wprint/wprint (apply str "Usage reminders: " reminders)))
+        (when commands (wprint/wprint (apply str "Commands: " commands)))
+        ))
       (when-let [dirnote (:direntry-note notes)]
-        (println (str term/bold dirnote term/reset)))
+        (when (or reminders commands) (wprint/wblank))
+        (wprint/whead "Directory note")
+        (wprint/wprint (str term/bold dirnote term/reset))
+        )
+
+
       (fs/set-last-modified-time dotfile (System/currentTimeMillis))
+
       )
 
     )
