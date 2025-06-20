@@ -1,13 +1,17 @@
 ;system wayfinder notes - see `man way` or `way help`
 {
- :direntry-note "Shows on first entry to dir"
- :usage-reminders {:bbtest ["Testing with Babshka" 
+ :search-keys ["wayf-dev"]
+ :direntry-note "Welcome to the system wayfinder project"
+ :usage-reminders {:bbtest ["Testing with Babashka" 
                             "bb -m way.main notecheck"
                             "bb -m way.main show"
 			    ]
 		   :bbrepl ["Starting the repl" "make nrepl"]
 		   :touch  ["Make note active again" "touch -d yesterday .wayf"]
                    }
-  :commands       {:repl ["make repl"]}
+  :commands       {:lsr   "ls /"
+                   :ls    "asdfasdfsdasdf"
+		   :touch "touch -d yesterday .wayf"
+		   :vimt  "vim ~/.init.vim"}
   :reminders      ["Clean up something something"]
 }

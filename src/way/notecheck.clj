@@ -37,7 +37,7 @@
       (when-let [dirnote (:direntry-note notes)]
         (when (or reminders commands) (wprint/wblank))
         (wprint/whead "Directory note")
-        (wprint/wprint (str term/bold dirnote term/reset))
+        (wprint/wprint dirnote)
         )
 
 

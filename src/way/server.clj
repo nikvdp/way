@@ -1,5 +1,6 @@
 (ns way.server
-  (:require [clojure.java.io :as io])
+  (:require [clojure.java.io :as io]
+            [clojure.edn :as edn])
   (:import [java.net ServerSocket Socket])
   )
 
@@ -10,10 +11,10 @@
          ]
       (println "Connection accepted from: " (.getRemoteSocketAddress client))
       (println "Message: "
-               (.read (java.io.PushbackReader. in))
-               (.write out "You have found your way")
-               (.flush out)
-      ))))
+               (edn/read (java.io.PushbackReader. in)))
+      (.write out "You have found your way")
+      (.flush out)
+    )))
 
 (defn systemd-serve []
   (let [listen-fd (Integer/parseInt (System/getenv "LISTEN_FDS"))
