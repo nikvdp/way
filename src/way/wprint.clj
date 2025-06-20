@@ -10,6 +10,9 @@
     )
 )
 
+(defn wdecor [line]
+  (println (apply str "※┃" line)))
+
 (defn whead [message]
   (println (apply str "※┃" message))
   (println (apply str "▶┣" (repeat (count message) "━")))
