@@ -1,4 +1,5 @@
 (ns way.main
+ (:gen-class)
  (:require [way.notecheck :as notecheck]
            [way.runner :as runner]
            [way.shell :as shell]
